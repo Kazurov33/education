@@ -1,0 +1,96 @@
+const readLine = require("readline"); // Подключение модуля для чтения данных
+
+let rl = readLine.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  prompt: "",
+});
+
+const signs = {
+  "u+": (x) => x,
+  "u-": (x) => -x,
+};
+
+const operators = {
+  "+": (x, y) => x + y,
+  "-": (x, y) => x - y,
+  "*": (x, y) => x * y,
+  "/": (x, y) => x / y,
+};
+
+// Определение приоритетности знака
+const priority = (op) => {
+  return op == "u-" || op == "u+"
+    ? 3
+    : op == "*" || op == "/"
+    ? 2
+    : op == "+" || op == "-"
+    ? 1
+    : -1;
+};
+
+// Форматирование в обратную польскую нотацию
+const format = (str) => {
+  let newStr = "";
+  let box = [];
+  let arrayStr = str.split("");
+  arrayStr.forEach((elem, index) => {
+    if (elem == " ") {
+      return;
+    } else if (elem == "(") {
+      box.push(elem);
+    } else if (elem == ")") {
+      while (box[box.length - 1] != "(") {
+        newStr += " " + box.pop();
+      }
+      box.pop();
+    } else if (elem in operators) {
+      if (elem == "+" || elem == "-") {
+        if (arrayStr[index - 1] in operators || arrayStr[index - 1] == "(") {
+          box.push(`u${elem}`);
+          return;
+        }
+      }
+      newStr += " ";
+      while (priority(box[box.length - 1]) >= priority(elem)) {
+        newStr += box.pop() + " ";
+      }
+      box.push(elem);
+    } else if (!isNaN(elem)) {
+      newStr += elem;
+    } else {
+      return;
+    }
+  });
+
+  while (box.length != 0) {
+    newStr += " " + box.pop();
+  }
+
+  return newStr;
+};
+
+// Высчитывание выражения
+const count = (str) => {
+  let stack = [];
+  str.split(" ").forEach((elem) => {
+    if (elem in operators) {
+      let [y, x] = [stack.pop(), stack.pop()];
+      stack.push(operators[elem](x, y));
+    } else if (elem in signs) {
+      let x = stack.pop();
+      stack.push(signs[elem](x));
+    } else {
+      stack.push(parseFloat(elem));
+    }
+  });
+
+  return stack.pop();
+};
+
+rl.prompt();
+rl.on("line", (input) => {
+  let str = format(input);
+  console.log("Выражение: " + str);
+  console.log("Сумма: " + count(str));
+});
