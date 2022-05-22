@@ -3,6 +3,13 @@ const path = require("path");
 const app = require("./config/app");
 const prisma = require("./config/prisma");
 
+require("./objectsRequest/event");
+require("./objectsRequest/system");
+require("./objectsRequest/users");
+
+require("./directionRequest/eventType");
+require("./directionRequest/role");
+
 prisma.$on("error", (e) => {
   console.error(e);
 });

@@ -6,35 +6,44 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("EVENT_APP_BASE")
+  url      = env("NOTIFY_APP_BASE")
 }
 
 model User {
-  Login    String   @unique @db.VarChar(100)
-  Password DateTime @db.Timestamp(0)
-  Name     String   @db.VarChar(100)
-  Email    String?  @db.VarChar(100)
+  Login    String  @id @unique @db.VarChar(100)
+  Password String  @db.VarChar(255)
+  Name     String  @db.VarChar(100)
+  Email    String? @db.VarChar(100)
   RoleID   Int
-  Role     Role     @relation(fields: [RoleID], references: [ID], onDelete: SetNull)
+  Role     Role    @relation(fields: [RoleID], references: [Key], onDelete: SetNull)
   Event    Event[]
+}
+
+model Receiver {
+  ReceiverID String     @unique @db.VarChar(100)
+  Email      String?    @db.VarChar(100)
+  Event      Event[]
+  Settings   Profiles[]
 }
 
 model Event {
   nnEvent      Int       @id @default(autoincrement())
   CreationDate DateTime  @db.Timestamp(0)
   CreatorLogin String    @db.VarChar(100)
-  ReceiverID   String    @db.VarChar(100)
-  SystemID     String    @db.VarChar(255)
+  ReceiverID   String?   @db.VarChar(100)
+  SystemID     String?   @db.VarChar(255)
   Text         String
   EventTypeID  Int
   isRead       Boolean   @default(false)
   User         User      @relation(fields: [CreatorLogin], references: [Login], onDelete: SetNull)
-  EventType    EventType @relation(fields: [EventTypeID], references: [ID], onDelete: SetNull)
-  System       System    @relation(fields: [SystemID], references: [Key], onDelete: SetNull)
+  EventType    EventType @relation(fields: [EventTypeID], references: [Key], onDelete: SetNull)
+  System       System?   @relation(fields: [SystemID], references: [Key], onDelete: SetNull)
+  Receiver     Receiver? @relation(fields: [ReceiverID], references: [ReceiverID], onDelete: SetNull)
 }
 
 model Role {
   ID   Int    @id @default(autoincrement())
+  Key  Int    @unique
   Name String @db.VarChar(100)
   User User[]
 }
@@ -48,13 +57,15 @@ model System {
 
 model EventType {
   ID           Int     @id @default(autoincrement())
+  Key          Int     @unique
   Name         String  @db.VarChar(100)
   DefaultColor String  @db.VarChar(30)
   Event        Event[]
 }
 
-model Settings {
-  ID           Int    @id @default(autoincrement())
-  ReceiverID   String @db.VarChar(100)
-  DefaultColor String @db.VarChar(30)
+model Profiles {
+  ID            Int      @id @default(autoincrement())
+  ReceiverID    String   @db.VarChar(100)
+  SettingObject String   @db.VarChar(255)
+  Receiver      Receiver @relation(fields: [ReceiverID], references: [ReceiverID], onDelete: SetNull)
 }

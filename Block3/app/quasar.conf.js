@@ -8,8 +8,6 @@
 /* eslint-env node */
 
 module.exports = function (/* ctx */) {
-  let { appStyle } = require("../basicConfigs/appInfo");
-
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -23,7 +21,7 @@ module.exports = function (/* ctx */) {
     boot: [],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
-    css: [`${appStyle}/app.sass`],
+    css: [`app.sass`],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
@@ -42,14 +40,7 @@ module.exports = function (/* ctx */) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       vueRouterMode: "history", // available values: 'hash', 'history'
-      env: {
-        TOUCH_APP_PRODUCTION_URL: process.env.TOUCH_APP_PRODUCTION_URL,
-        TOUCH_APP_S3_PROFILE_IMAGES_FILESIZE:
-          process.env.TOUCH_APP_S3_PROFILE_IMAGES_FILESIZE || 512 * 1024,
-        TOUCH_APP_S3_STATION_IMAGES_FILESIZE:
-          process.env.TOUCH_APP_S3_STATION_IMAGES_FILESIZE || 512 * 1024,
-        TOUCH_APP_STYLE: process.env.TOUCH_APP_STYLE,
-      },
+      env: {},
 
       // transpile: false,
 
