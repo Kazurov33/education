@@ -5,9 +5,7 @@
     <div>
       <div style="font-size: 30vh">404</div>
 
-      <div class="text-h2" style="opacity: 0.4">
-        {{ language.error404 }}
-      </div>
+      <div class="text-h2" style="opacity: 0.4">Whooops...</div>
 
       <q-btn
         class="q-mt-xl"
@@ -15,7 +13,7 @@
         text-color="green"
         unelevated
         :to="{ name: 'WebMap' }"
-        :label="language.toHome"
+        label="Home"
         no-caps
       />
     </div>
@@ -23,17 +21,11 @@
 </template>
 
 <script>
-import lng from "src/assets/languagePackAdmin";
-
 export default {
   name: "Error404",
   data() {
-    return {
-      language: {},
-    };
+    return {};
   },
-  async mounted() {
-    this.language = await lng();
-  },
+  async mounted() {},
 };
 </script>

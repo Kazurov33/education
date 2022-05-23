@@ -36,37 +36,112 @@ app.use(history());
 app.use(serveStatic("../app/dist/spa"));
 
 app.all("*", async (req, res, next) => {
-  // if (req.url.startsWith("/api")) {
-  // if (!req.url.startsWith("/api/auth")) {
-  //   authJwt.verifyToken(req, res, next);
-  //   if (res.headersSent == true) {
-  //     return;
-  //   }
-  // }
-  next();
-  // } else {
-  //   res.redirect("/");
-  // }
+  if (req.url.startsWith("/api")) {
+    if (!req.url.startsWith("/api/auth")) {
+      authJwt.verifyToken(req, res, next);
+      if (res.headersSent == true) {
+        return;
+      }
+    }
+    next();
+  } else {
+    res.redirect("/");
+  }
 });
 
 const WebSocket = require("ws");
 const wsServer = new WebSocket.Server({ port: 9000 });
-var CLIENTS = [];
+var CLIENTS = Object.create(null);
 
 wsServer.on("connection", onConnect);
 
 function onConnect(wsClient) {
   console.log("Новый пользователь");
-  // отправка приветственного сообщения клиенту
-  wsClient.send("Привет");
-  CLIENTS.push(wsClient);
 
-  wsClient.on("message", function (message) {
+  wsClient.on("message", function (text) {
     /* обработчик сообщений от клиента */
+    var message = JSON.parse(text);
+    if (
+      message.type == "auth" &&
+      message.id != null &&
+      message.system != null
+    ) {
+      prisma.system
+        .findUnique({
+          where: {
+            Key: message.system,
+          },
+        })
+        .then(async (system) => {
+          if (!system) {
+            wsClient.send(
+              JSON.stringify({ status: "Error", desc: "Incorrect system key" })
+            );
+          } else {
+            let receiver = await prisma.receiver.findUnique({
+              where: {
+                ReceiverID: message.id,
+              },
+              include: {
+                Events: true,
+                Profiles: true,
+              },
+            });
+            if (CLIENTS[message.id]) {
+              wsClient.send(
+                JSON.stringify({
+                  status: "Success",
+                  events: "",
+                })
+              );
+            }
+            if (!receiver) {
+              prisma.receiver
+                .create({
+                  data: {
+                    ReceiverID: message.id,
+                    Profiles: {
+                      create: {
+                        SettingObject: JSON.stringify({
+                          [message.system]: { telegram: false, email: false },
+                        }),
+                      },
+                    },
+                  },
+                })
+                .then(() => {
+                  CLIENTS[message.id] = wsClient;
+                  wsClient.send(
+                    JSON.stringify({
+                      status: "Success",
+                      events: "",
+                    })
+                  );
+                });
+            } else {
+              let listOfEvents = receiver.Events.filter(
+                (x) => x.SystemID === system || x.SystemID === null
+              );
+
+              wsClient.send(
+                JSON.stringify({
+                  status: "Success",
+                  events: listOfEvents,
+                })
+              );
+
+              CLIENTS[message.id] = wsClient;
+            }
+          }
+        });
+    }
   });
 
-  wsClient.on("close", function () {
+  wsClient.on("close", function (wsClient) {
     // отправка уведомления в консоль
+
+    delete CLIENTS[wsClient.ReceiverID];
+
     console.log("Пользователь отключился");
   });
   return wsClient;
@@ -83,27 +158,6 @@ function sendNotify(message, system, id) {
 }
 
 console.log("Сервер запущен на 9000 порту");
-
-// const myWs = new WebSocket('ws://localhost:9000');
-// // обработчик проинформирует в консоль когда соединение установится
-// myWs.onopen = function () {
-//   console.log('подключился');
-// };
-// // обработчик сообщений от сервера
-// myWs.onmessage = function (message) {
-//   console.log('Message: %s', message.data);
-// };
-// // функция для отправки echo-сообщений на сервер
-// function wsSendEcho(value) {
-//   myWs.send(JSON.stringify({action: 'ECHO', data: value.toString()}));
-// }
-// // функция для отправки команды ping на сервер
-// function wsSendPing() {
-//   myWs.send(JSON.stringify({action: 'PING'}));
-// }
-// ƒ (message) {
-//   console.log('Message: %s', message.data);
-// }
 
 module.exports = {
   get: (path, req) => {

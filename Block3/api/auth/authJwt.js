@@ -21,7 +21,7 @@ verifyToken = (req, res, next) => {
       // if (decoded.exp - (Date.now() / 1000).toFixed(0) < 21600) {
       //   authController.updateToken(req, res);
       // }
-      req.UserId = decoded.UserId;
+      req.Login = decoded.Login;
 
       //next();
       return;

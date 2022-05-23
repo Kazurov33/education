@@ -1,7 +1,7 @@
 const prisma = require("../config/prisma");
 const app = require("../config/app");
 
-app.post("/api/eventType/all", async (req, res) => {
+app.get("/api/eventType/all", async (req, res) => {
   // #swagger.tags = ['Event Types']
   // #swagger.description = 'Получение всех типов событий'
 

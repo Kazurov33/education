@@ -1,13 +1,7 @@
 import axios from "axios";
 import authHeader from "./auth-header";
-import { productPaths, developPaths } from "../../../../basicConfigs/paths";
 
-const api = "http://localhost:3080/api/auth";
-
-const passApi =
-  process.env.NODE_ENV == "production"
-    ? productPaths.request
-    : developPaths.request;
+const api = "http://localhost:3080/api/auth/";
 
 class AuthServiceAdmin {
   login(user) {
@@ -15,12 +9,8 @@ class AuthServiceAdmin {
       .post(api + "signin", {
         PhoneNumber: user.PhoneNumber,
         Password: user.Password,
-        userType: 1,
       })
       .then((response) => {
-        if (response.data.Role == 5) {
-          return false;
-        }
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
         }
@@ -34,32 +24,15 @@ class AuthServiceAdmin {
   }
 
   register(user) {
-    user.userType = 1;
     return axios.post(api + "signup", user);
   }
 
   changePassword(user) {
-    return axios.put(passApi + "/user/changepassword", user, {
+    return axios.put(passApi + "changepassword", user, {
       crossDomain: true,
       headers: user.accessToken
         ? { "x-access-token": user.accessToken }
         : authHeader(),
-    });
-  }
-
-  setPassword(user) {
-    return axios.put(passApi + "/m/user/setPass", user, {
-      crossDomain: true,
-      headers: user.accessToken
-        ? { "x-access-token": user.accessToken }
-        : authHeader(),
-    });
-  }
-
-  checkToken() {
-    return axios.get(api + "checktoken", {
-      crossDomain: true,
-      headers: authHeader(),
     });
   }
 

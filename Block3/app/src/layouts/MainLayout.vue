@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated class="glossy">
-      <q-toolbar>
+      <q-toolbar color="primary">
         <q-btn
           flat
           dense
@@ -11,28 +11,27 @@
           icon="menu"
         />
 
-        <q-toolbar-title> Сервис уведомлений </q-toolbar-title>
+        <q-toolbar-title> Notify Service </q-toolbar-title>
 
         <q-space />
 
-        <q-btn icon="logout" @click="logout" flat />
+        <q-btn icon="logout" @click="logOut" flat />
       </q-toolbar>
     </q-header>
 
     <q-drawer
       v-model="leftDrawerOpen"
-      show-if-above
       bordered
       :width="170"
       content-class="bg-grey-2"
     >
       <q-list>
-        <q-item-label header>Главная</q-item-label>
+        <q-item-label header>Menu</q-item-label>
         <q-item
           clickable
           :to="{ name: 'Home' }"
-          :class="active == 'Diplomas' ? 'itemActive' : 'itemNonActive'"
-          @click="active = 'Diplomas'"
+          :class="active == 'Home' ? 'itemActive' : 'itemNonActive'"
+          @click="active = 'Home'"
         >
           <q-item-section avatar>
             <q-icon name="info" />
@@ -51,8 +50,6 @@
 </template>
 
 <script>
-import { objectsService } from "../../services/objects.service";
-
 export default {
   name: "MainLayout",
   components: {},
@@ -64,8 +61,8 @@ export default {
   },
   methods: {
     logOut() {
-      this.$store.dispatch("auth/logoutAdmin");
-      this.$router.push("/admin/login");
+      this.$store.dispatch("auth/logout");
+      this.$router.push({ name: "Login" });
     },
   },
 };

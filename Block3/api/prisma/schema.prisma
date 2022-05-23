@@ -22,8 +22,8 @@ model User {
 model Receiver {
   ReceiverID String     @unique @db.VarChar(100)
   Email      String?    @db.VarChar(100)
-  Event      Event[]
-  Settings   Profiles[]
+  Events      Event[]
+  Profiles   Profiles[]
 }
 
 model Event {

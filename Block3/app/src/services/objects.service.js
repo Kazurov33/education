@@ -25,10 +25,10 @@ class ObjectsService extends BaseService {
   // Events - События
 
   events(data) {
-    return this._put(`/events`, data);
+    return this._get(`/events`, data);
   }
   newEvents(data) {
-    return this._put(`/events/new`, data);
+    return this._post(`/events/new`, data);
   }
 }
 

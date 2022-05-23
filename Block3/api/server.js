@@ -21,6 +21,11 @@ app.get("/", (req, res) => {
 app.all("*", async (req, res) => {
   if (res.statusCode != 200 && res.statusCode != 204) {
     if (res.headersSent == false) {
+      console.log(
+        `block: ${res.block}, process: ${
+          res.process
+        }, Response: ${JSON.stringify(res.body)}`
+      );
       res.send("System error, please contact the administrator");
     }
   }

@@ -37,6 +37,7 @@ export default function (/* { store, ssrContext } */) {
     if (authRequired && !loggedIn) {
       return next("/login");
     }
+    next();
   });
 
   return Router;

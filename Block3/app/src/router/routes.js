@@ -1,8 +1,8 @@
 const routes = [
   {
     path: "/login",
-    name: "WebLogin",
-    component: () => import("../pages/Web/Enter/LoginPage.vue"),
+    name: "Login",
+    component: () => import("../pages/Enter/LoginPage.vue"),
   },
   {
     path: "",

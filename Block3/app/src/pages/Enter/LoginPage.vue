@@ -1,15 +1,11 @@
 <template>
-  <div
-    class="fixed-overlay"
-    :style="`background-image: url(changeableIcons/${styleFolder}/AdminEnter/EnterBackgroundAdmin.png);`"
-  >
+  <div class="fixed-overlay" style="background-color: burlywood">
     <Login />
   </div>
 </template>
 
 <script>
-import Login from "src/components/Admin/Login";
-import { appStyle } from "../../../../../basicConfigs/appInfo";
+import Login from "src/components/Login";
 
 export default {
   name: "LoginPage",
@@ -17,7 +13,7 @@ export default {
     Login,
   },
   data() {
-    return { styleFolder: appStyle };
+    return {};
   },
   methods: {},
 };

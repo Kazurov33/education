@@ -23,14 +23,14 @@ exports.signup = async (req, res, next) => {
     res.status(500);
     res.body = err.message;
     res.block = "Auth";
-    res.process = "Client signup";
+    res.process = "User signup";
     next();
   }
 };
 
 exports.signin = async (req, res, next) => {
   try {
-    await prisma.persones
+    await prisma.user
       .findFirst({
         where: {
           Login: req.body["Login"],
@@ -44,7 +44,7 @@ exports.signin = async (req, res, next) => {
 
         var passwordIsValid = bcrypt.compareSync(
           req.body["Password"],
-          person.Users.Password
+          person.Password
         );
 
         if (!passwordIsValid) {
@@ -57,7 +57,7 @@ exports.signin = async (req, res, next) => {
 
         var token = jwt.sign(
           {
-            Login: user.Login,
+            Login: person.Login,
             Role: person.RoleID,
           },
           config.secret,

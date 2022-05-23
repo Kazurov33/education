@@ -19,7 +19,7 @@ app.post("/api/events/new", async (req, res) => {
   // #swagger.description = 'Создание уведомления'
 
   try {
-    var listOfReceiver;
+    var listOfReceiver = [];
     var system = null;
     let typeOfSend = req.body["Type"];
     if (typeOfSend == "full") {
@@ -34,10 +34,10 @@ app.post("/api/events/new", async (req, res) => {
     listOfReceiver.forEach(async (receiver) => {
       await prisma.event.create({
         data: {
-          CreatorLogin: new Date(),
+          CreationDate: new Date(),
           CreatorLogin: req.Login,
           ReceiverID: receiver.ReceiverID,
-          SystemID: String(system),
+          SystemID: system,
           Text: String(req.body["Text"]),
           EventTypeID: Number(req.body["EventTypeID"]),
         },
