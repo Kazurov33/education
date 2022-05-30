@@ -1,0 +1,242 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.2",
+    "title": "Notify",
+    "description": "API for notify service"
+  },
+  "host": "localhost:3080",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Методы авторизации"
+    },
+    {
+      "name": "Systems",
+      "description": "Методы авторизации"
+    },
+    {
+      "name": "Events",
+      "description": "Методы работы с машинами"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "AccessToken": {
+      "type": "apiKey",
+      "name": "x-access-token",
+      "in": "header"
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/events/all": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Получение всех уведомлений",
+        "parameters": [],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/events/new": {
+      "post": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Создание уведомления",
+        "parameters": [],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/events/read": {
+      "put": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Установить уведомление прочитанным",
+        "parameters": [],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/events": {
+      "delete": {
+        "tags": [
+          "Events"
+        ],
+        "description": "Удаление уведомления",
+        "parameters": [],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/system/all": {
+      "get": {
+        "tags": [
+          "Systems"
+        ],
+        "description": "Получение всех систем",
+        "parameters": [],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/system/create": {
+      "post": {
+        "tags": [
+          "Systems"
+        ],
+        "description": "Получение всех систем",
+        "parameters": [],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/auth/signup": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Регистрация сотрудника",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "Данные пользователя",
+            "required": true,
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/AddUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/auth/signin": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Авторизация сотрудника",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "Данные пользователя",
+            "required": true,
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "PhoneNumber": {
+          "type": "string",
+          "example": "89997776655"
+        },
+        "Password": {
+          "type": "string",
+          "example": "Qwerty1"
+        }
+      },
+      "required": [
+        "PhoneNumber",
+        "Password"
+      ]
+    },
+    "AddUser": {
+      "type": "object",
+      "properties": {
+        "Password": {
+          "type": "string",
+          "example": "Qwerty1"
+        },
+        "Login": {
+          "type": "string",
+          "example": "user"
+        },
+        "Email": {
+          "type": "string",
+          "example": "example@mail.ru"
+        },
+        "Role": {
+          "type": "number",
+          "example": 1
+        }
+      },
+      "required": [
+        "Password",
+        "Login",
+        "Email",
+        "Role"
+      ]
+    }
+  },
+  "security": [
+    {
+      "AccessToken": []
+    }
+  ]
+}
