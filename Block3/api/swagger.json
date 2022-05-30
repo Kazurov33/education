@@ -186,6 +186,34 @@
           }
         }
       }
+    },
+    "/api/eventType/all": {
+      "get": {
+        "tags": [
+          "Event Types"
+        ],
+        "description": "Получение всех типов событий",
+        "parameters": [],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/role/all": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "description": "Получение всех ролей",
+        "parameters": [],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
     }
   },
   "definitions": {

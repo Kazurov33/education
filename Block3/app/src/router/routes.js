@@ -13,6 +13,11 @@ const routes = [
         name: "Home",
         component: () => import("pages/Home.vue"),
       },
+      {
+        path: "systems",
+        name: "Systems",
+        component: () => import("pages/Systems.vue"),
+      },
     ],
   },
   // Always leave this as last one,

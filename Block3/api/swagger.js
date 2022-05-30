@@ -5,6 +5,8 @@ const endpointsFiles = [
   "./objectsRequest/event",
   "./objectsRequest/system",
   "./objectsRequest/users",
+  "./directionRequest/eventType",
+  "./directionRequest/role",
 ];
 
 const doc = {

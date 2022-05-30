@@ -40,6 +40,19 @@
             <q-item-label>Home</q-item-label>
           </q-item-section>
         </q-item>
+        <q-item
+          clickable
+          :to="{ name: 'Systems' }"
+          :class="active == 'Systems' ? 'itemActive' : 'itemNonActive'"
+          @click="active = 'Systems'"
+        >
+          <q-item-section avatar>
+            <q-icon name="dashboard" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Systems</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
