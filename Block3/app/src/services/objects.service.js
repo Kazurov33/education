@@ -24,11 +24,19 @@ class ObjectsService extends BaseService {
 
   // Events - События
 
-  events(data) {
-    return this._get(`/events`, data);
+  events() {
+    return this._get(`/events/all`);
   }
   newEvents(data) {
     return this._post(`/events/new`, data);
+  }
+
+  // Systems - системы
+  systems() {
+    return this._get(`/system/all`);
+  }
+  createSystem(data) {
+    return this._get(`/system/create`, data);
   }
 }
 
