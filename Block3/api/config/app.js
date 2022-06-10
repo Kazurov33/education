@@ -87,6 +87,15 @@ function onConnect(wsClient) {
                 Profiles: true,
               },
             });
+            let eventsForAllUsers = await prisma.event.findMany({
+              where: { ReceiverID: null },
+              select: {
+                CreationDate: true,
+                Text: true,
+                EventTypeID: true,
+                isRead: true,
+              },
+            });
             if (CLIENTS[message.id]) {
               wsClient.send(
                 JSON.stringify({
@@ -121,12 +130,15 @@ function onConnect(wsClient) {
             } else {
               let listOfEvents = receiver.Events.filter(
                 (x) => x.SystemID === system || x.SystemID === null
-              ).map((x) => ({
-                CreationDate: x.CreationDate,
-                EventTypeID: x.EventTypeID,
-                Text: x.Text,
-                isRead: true,
-              }));
+              )
+                .map((x) => ({
+                  CreationDate: x.CreationDate,
+                  EventTypeID: x.EventTypeID,
+                  Text: x.Text,
+                  isRead: true,
+                }))
+                .concat(eventsForAllUsers)
+                .sort((a, b) => b.CreationDate - a.CreationDate);
 
               wsClient.send(
                 JSON.stringify({
