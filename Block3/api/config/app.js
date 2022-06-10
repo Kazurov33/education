@@ -13,8 +13,8 @@ app.use(cors()); // original
 
 const httpServer = http.createServer(app);
 
-httpServer.listen(3080, () => {
-  console.log(`http: 3080`);
+httpServer.listen(3081, () => {
+  console.log(`http: 3081`);
 });
 
 app.use((req, res, next) => {
@@ -96,7 +96,7 @@ function onConnect(wsClient) {
               );
             }
             if (!receiver) {
-              prisma.receiver
+              await prisma.receiver
                 .create({
                   data: {
                     ReceiverID: message.id,
@@ -121,7 +121,12 @@ function onConnect(wsClient) {
             } else {
               let listOfEvents = receiver.Events.filter(
                 (x) => x.SystemID === system || x.SystemID === null
-              );
+              ).map((x) => ({
+                CreationDate: x.CreationDate,
+                EventTypeID: x.EventTypeID,
+                Text: x.Text,
+                isRead: true,
+              }));
 
               wsClient.send(
                 JSON.stringify({
