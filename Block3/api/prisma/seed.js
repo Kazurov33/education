@@ -40,6 +40,15 @@ async function main() {
       },
     ],
   });
+
+  await prisma.system.createMany({
+    data: [
+      {
+        Name: "Silent Notary",
+        DefaultColor: "hirfys-desvuw-6xeKvu",
+      },
+    ],
+  });
 }
 
 main()

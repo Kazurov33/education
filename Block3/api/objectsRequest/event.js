@@ -32,7 +32,7 @@ app.post("/api/events/new", async (req, res) => {
       system = req.body["SystemID"];
     }
     listOfReceiver.forEach(async (receiver) => {
-      await prisma.event.create({
+      let newMessage = await prisma.event.create({
         data: {
           CreationDate: new Date(),
           CreatorLogin: req.Login,
@@ -42,7 +42,9 @@ app.post("/api/events/new", async (req, res) => {
           EventTypeID: Number(req.body["EventTypeID"]),
         },
       });
+      app.sendNotify(newMessage);
     });
+
     res.json();
   } catch (err) {
     console.error(err);

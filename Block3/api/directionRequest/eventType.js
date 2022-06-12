@@ -7,7 +7,6 @@ app.get("/api/eventType/all", async (req, res) => {
 
   try {
     let eventTypes = await prisma.eventType.findMany();
-    app.sendNotify("TEST");
     res.json(eventTypes);
   } catch (err) {
     console.error(err);
