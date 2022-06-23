@@ -6,6 +6,7 @@ const prisma = require("./config/prisma");
 require("./objectsRequest/event");
 require("./objectsRequest/system");
 require("./objectsRequest/users");
+require("./objectsRequest/receivers");
 
 require("./directionRequest/eventType");
 require("./directionRequest/role");

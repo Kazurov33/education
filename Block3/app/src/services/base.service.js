@@ -15,6 +15,10 @@ export class BaseService {
           resolve(response.data);
         })
         .catch(function (error) {
+          if (error.response.status == 401) {
+            localStorage.removeItem("user");
+            window.location.reload();
+          }
           reject(error);
         });
     });

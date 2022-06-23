@@ -22,6 +22,12 @@ class ObjectsService extends BaseService {
     return this._get(`/users`);
   }
 
+  // Receivers - Данные получателей уведомлений
+
+  receivers() {
+    return this._get(`/receivers/all`);
+  }
+
   // Events - События
 
   events() {
@@ -36,7 +42,10 @@ class ObjectsService extends BaseService {
     return this._get(`/system/all`);
   }
   createSystem(data) {
-    return this._get(`/system/create`, data);
+    return this._post(`/system/create`, data);
+  }
+  deleteSystem(id) {
+    return this._delete(`/system/${id}`);
   }
 }
 

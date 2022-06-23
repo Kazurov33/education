@@ -2,7 +2,7 @@ module.exports = function (that, color, message, error) {
   if (color == "negative") {
     return that.$q.notify({
       color: color,
-      message: message || "Ошибка",
+      message: message || "Error",
       caption:
         (error.response &&
           error.response.data &&
@@ -16,7 +16,7 @@ module.exports = function (that, color, message, error) {
   } else {
     return that.$q.notify({
       color: color || "positive",
-      message: message || "Успешно",
+      message: message || "Success",
       icon: "done",
       position: "top",
     });

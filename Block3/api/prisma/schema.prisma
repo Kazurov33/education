@@ -20,9 +20,10 @@ model User {
 }
 
 model Receiver {
-  ReceiverID String     @unique @db.VarChar(100)
+  ReceiverID String     @id @unique @db.VarChar(100)
   Email      String?    @db.VarChar(100)
-  Events      Event[]
+  TelegramID String?    @db.VarChar(100)
+  Events     Event[]
   Profiles   Profiles[]
 }
 
@@ -49,10 +50,11 @@ model Role {
 }
 
 model System {
-  ID    Int     @id @default(autoincrement())
-  Name  String  @db.VarChar(100)
-  Key   String  @unique @db.VarChar(255)
-  Event Event[]
+  ID       Int        @id @default(autoincrement())
+  Name     String     @db.VarChar(100)
+  Key      String     @unique @db.VarChar(255)
+  Event    Event[]
+  Profiles Profiles[]
 }
 
 model EventType {
@@ -64,8 +66,11 @@ model EventType {
 }
 
 model Profiles {
-  ID            Int      @id @default(autoincrement())
-  ReceiverID    String   @db.VarChar(100)
-  SettingObject String   @db.VarChar(255)
-  Receiver      Receiver @relation(fields: [ReceiverID], references: [ReceiverID], onDelete: SetNull)
+  ID         Int      @id @default(autoincrement())
+  ReceiverID String   @db.VarChar(100)
+  SystemID   String   @db.VarChar(255)
+  isTelegram Boolean  @default(false)
+  isEmail    Boolean  @default(false)
+  System     System   @relation(fields: [SystemID], references: [Key], onDelete: SetNull)
+  Receiver   Receiver @relation(fields: [ReceiverID], references: [ReceiverID], onDelete: SetNull)
 }

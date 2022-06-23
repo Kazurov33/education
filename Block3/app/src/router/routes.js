@@ -18,6 +18,11 @@ const routes = [
         name: "Systems",
         component: () => import("pages/Systems.vue"),
       },
+      {
+        path: "events",
+        name: "EventHistory",
+        component: () => import("pages/EventHistory.vue"),
+      },
     ],
   },
   // Always leave this as last one,

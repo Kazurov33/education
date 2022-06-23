@@ -39,13 +39,13 @@ app.post("/api/system/create", async (req, res) => {
   }
 });
 
-app.delete("/api/system/delete", async (req, res) => {
+app.delete("/api/system/:Key", async (req, res) => {
   // #swagger.tags = ['Systems']
   // #swagger.description = 'Удаление системы'
 
   try {
     let check = await prisma.system.findUnique({
-      where: { Key: String(req.body["Key"]) },
+      where: { Key: String(req.params["Key"]) },
     });
     if (check) {
       res.status(400).send("Key is not found");
@@ -53,7 +53,7 @@ app.delete("/api/system/delete", async (req, res) => {
     }
     let systems = await prisma.system.delete({
       data: {
-        Key: String(req.body["Key"]),
+        Key: String(req.params["Key"]),
       },
     });
     res.json(systems);

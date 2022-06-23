@@ -1,12 +1,16 @@
 const prisma = require("../config/prisma");
 const app = require("../config/app");
+const { sendNotify } = require("../functions/notifyFunc");
 
 app.get("/api/events/all", async (req, res) => {
   // #swagger.tags = ['Events']
   // #swagger.description = 'Получение всех уведомлений'
 
   try {
-    let events = await prisma.event.findMany();
+    let events = await prisma.event.findMany({
+      include: { System: true, EventType: true, Receiver: true },
+      orderBy: { CreationDate: "desc" },
+    });
     res.json(events);
   } catch (err) {
     console.error(err);
@@ -20,52 +24,34 @@ app.post("/api/events/new", async (req, res) => {
 
   try {
     var listOfReceiver = [];
-    var system = null;
-    let typeOfSend = req.body["Type"];
-    if (typeOfSend == "full") {
-      listOfReceiver.push({ ReceiverID: null });
-    } else if (typeOfSend == "systemFull") {
-      listOfReceiver.push({ ReceiverID: null });
-      system = req.body["SystemID"];
-    } else if (Array.isArray(typeOfSend)) {
-      listOfReceiver = typeOfSend;
-      system = req.body["SystemID"];
+    var system = req.body["SystemID"];
+    if (Array.isArray(req.body["ReceiverID"])) {
+      listOfReceiver = req.body["ReceiverID"];
+    } else {
+      listOfReceiver = await prisma.profiles.findMany({
+        where: {
+          SystemID: system,
+        },
+        select: {
+          ReceiverID: true,
+        },
+      });
+      listOfReceiver = listOfReceiver.map((x) => x.ReceiverID);
     }
     listOfReceiver.forEach(async (receiver) => {
       let newMessage = await prisma.event.create({
         data: {
           CreationDate: new Date(),
           CreatorLogin: req.Login,
-          ReceiverID: receiver.ReceiverID,
+          ReceiverID: receiver,
           SystemID: system,
           Text: String(req.body["Text"]),
           EventTypeID: Number(req.body["EventTypeID"]),
         },
       });
-      app.sendNotify(newMessage);
+      await sendNotify(newMessage);
     });
 
-    res.json();
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(err.message);
-  }
-});
-
-app.put("/api/events/read", async (req, res) => {
-  // #swagger.tags = ['Events']
-  // #swagger.description = 'Установить уведомление прочитанным'
-
-  try {
-    await prisma.event.updateMany({
-      where: {
-        ReceiverID: Number(req.body["ReceiverID"]),
-        isRead: false,
-      },
-      data: {
-        isRead: true,
-      },
-    });
     res.json();
   } catch (err) {
     console.error(err);

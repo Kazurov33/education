@@ -30,8 +30,11 @@
         <q-item
           clickable
           :to="{ name: 'Home' }"
-          :class="active == 'Home' ? 'itemActive' : 'itemNonActive'"
-          @click="active = 'Home'"
+          :class="$route.name == 'Home' ? 'itemActive' : 'itemNonActive'"
+          @click="
+            active = 'Home';
+            leftDrawerOpen = false;
+          "
         >
           <q-item-section avatar>
             <q-icon name="info" />
@@ -43,14 +46,35 @@
         <q-item
           clickable
           :to="{ name: 'Systems' }"
-          :class="active == 'Systems' ? 'itemActive' : 'itemNonActive'"
-          @click="active = 'Systems'"
+          :class="$route.name == 'Systems' ? 'itemActive' : 'itemNonActive'"
+          @click="
+            active = 'Systems';
+            leftDrawerOpen = false;
+          "
         >
           <q-item-section avatar>
             <q-icon name="dashboard" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Systems</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item
+          clickable
+          :to="{ name: 'EventHistory' }"
+          :class="
+            $route.name == 'EventHistory' ? 'itemActive' : 'itemNonActive'
+          "
+          @click="
+            active = 'EventHistory';
+            leftDrawerOpen = false;
+          "
+        >
+          <q-item-section avatar>
+            <q-icon name="history" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Events history</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -81,4 +105,11 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.itemActive {
+  color: primary !important;
+}
+.itemNonActive {
+  color: #000 !important;
+}
+</style>

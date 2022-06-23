@@ -30,7 +30,7 @@
     "https": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "minio": "^7.0.26",
-    "nodemailer": "^6.6.5",
+    "nodemailer": "^6.7.5",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
     "sha1": "^1.1.1",
